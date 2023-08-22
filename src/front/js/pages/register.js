@@ -1,44 +1,95 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
-import "../../styles/home.css";
 
-export const SignUp = () => {
-  const { store, actions } = useContext(Context);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const history = useNavigate();
-  const token = sessionStorage.getItem("token");
-  console.log("Your token: " + token);
-  const handleClick = () => {
-    actions.register(email, password);
-  };
-  useEffect(() => {
-    if (store.token && store.token != "" && store.token != undefined)
-      history("/login");
-  });
-  return (
-    <div className="text-center mt-5">
-      <h1>Sign up!</h1>
-      {store.token && store.token != "" && store.token != undefined ? (
-        "You are now logged in with token " + token
-      ) : (
-        <div>
-          <input
-            type="text"
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button onClick={handleClick}>submit</button>
-        </div>
-      )}
-    </div>
-  );
+
+export const Register = () => {
+    const { store, actions } = useContext(Context);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [recovery_question, setRecoveryquestion] = useState("");
+    const [recovery_answer, setRecoveryanswer] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessages, setErrorMessages] = useState({});
+
+    const navigate = useNavigate();
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            setIsSubmitting(true);
+            const response = await actions.register(email, password, recovery_question, recovery_answer);
+            if (response.success) {
+                setEmail("");
+                setPassword("");
+                setRecoveryquestion("");
+                setRecoveryanswer("");
+                navigate("/login");
+            } else {
+                setErrorMessages(response.errors);
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <form className="form" onSubmit={handleSubmit}>
+            <div>
+                <div className="signup-form">
+                    <div className="forms">
+                        <label>Email Address</label>
+                        <input
+                            type="email"
+                            value={email}
+                            placeholder="Enter your email"
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                setErrorMessages((prevErrors) => ({ ...prevErrors, email: "" }));
+                            }}
+                        />
+                        {errorMessages.email && <div className="error-message">{errorMessages.email}</div>}
+                    </div>
+
+                    <div className="forms">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            value={password}
+                            placeholder="Enter your password"
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="forms">
+                        <label>Recovery Question</label>
+                        <input
+                            type="text"
+                            value={recovery_question}
+                            placeholder="Enter recovery question"
+                            onChange={(e) => setRecoveryquestion(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="forms">
+                        <label>Recovery Answer</label>
+                        <input
+                            type="text"
+                            value={recovery_answer}
+                            placeholder="Enter recovery answer"
+                            onChange={(e) => setRecoveryanswer(e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? "Submitting..." : "Submit"}
+                    </button>
+                </div>
+            </div>
+        </form>
+    );
 };

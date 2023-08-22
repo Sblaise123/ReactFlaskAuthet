@@ -7,6 +7,11 @@ import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
+import { Private} from "./pages/private"
+
+import {Login} from "./pages/login";
+
+import { Register } from "./pages/register";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
