@@ -20,7 +20,49 @@ const getState = ({ getStore, getActions, setStore }) => {
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
-
+			register: async (email, password,recovery_question,recovery_answer) => {
+				const opts = {
+				  method: "POST",
+				  headers: {
+					"Content-Type": "application/json",
+				  },
+				  body: JSON.stringify({
+					email: email,
+					password: password,
+					recovery_question: recovery_question,
+					recovery_answer: recovery_answer,
+				  }),
+				};
+				try {
+				  const response = await fetch(
+					process.env.BACKEND_URL + "/api/token",
+					opts
+				  );
+				  if (response.status !== 200) {
+					alert("Response was not a code 200.");
+					return false;
+				  }
+				  const data = await response.json();
+				  console.log("backend token: " + data);
+				  sessionStorage.setItem("user", data.access_token);
+				  setStore({ token: data.access_token });
+				  return true;
+				} catch (error) {
+				  console.error("Error! Description: " + error);
+				}
+			  },
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 			getMessage: async () => {
 				try{
 					// fetching data from the backend

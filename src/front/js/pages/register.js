@@ -14,25 +14,9 @@ export const Register = () => {
 
     const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            setIsSubmitting(true);
-            const response = await actions.register(email, password, recovery_question, recovery_answer);
-            if (response.success) {
-                setEmail("");
-                setPassword("");
-                setRecoveryquestion("");
-                setRecoveryanswer("");
-                navigate("/login");
-            } else {
-                setErrorMessages(response.errors);
-            }
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setIsSubmitting(false);
-        }
+    const handleSubmit =() => {
+         actions.register(email, password, recovery_question, recovery_answer);
+
     };
 
     return (

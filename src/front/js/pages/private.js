@@ -13,7 +13,7 @@ export const Private = () => {
     actions.register(email, password);
   };
   useEffect(() => {
-    if (!token) {
+    if (!store.token) {
       history("/login");
     }
     if (store.token && store.token != "" && store.token != undefined)
