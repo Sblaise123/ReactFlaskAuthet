@@ -28,7 +28,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Private = () => {
+export const Createaccount = () => {
   const Navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -40,7 +40,7 @@ export const Private = () => {
         {
           method: "GET",
           headers: {
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer" + token,
           },
         }
       )
@@ -53,6 +53,6 @@ export const Private = () => {
     }
   }, []);
   return <div>
-    <h1>privatePage</h1>
+    <h1>welcome to the private page</h1>
     </div>;
 };

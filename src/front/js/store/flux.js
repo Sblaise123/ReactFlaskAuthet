@@ -51,13 +51,43 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  console.error("Error! Description: " + error);
 				}
 			  },
-		
-		
-		
-		
-		
-		
-		
+			   loginUser : (email, password) => {
+				return async (dispatch) => {
+				  dispatch({ type: ActionTypes.LOGIN_REQUEST });
+			  
+				  const opts = {
+					method: "POST",
+					headers: {
+					  "Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+					  email: email,
+					  password: password,
+					}),
+				  };
+			  
+				  try {
+					const response = await fetch(process.env.BACKEND_URL + "/api/token", opts);
+			  
+					if (response.status !== 200) {
+					  alert("Response was not a code 200.");
+					  dispatch({ type: ActionTypes.LOGIN_FAILURE });
+					  return false;
+					}
+			  
+					const data = await response.json();
+					console.log("backend token: " + data);
+					sessionStorage.setItem("user", data.access_token);
+					dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: data.access_token });
+					return true;
+				  } catch (error) {
+					console.error("Error! Description: " + error);
+					dispatch({ type: ActionTypes.LOGIN_FAILURE });
+				  }
+				};
+			  },
+
+			
 		
 		
 		

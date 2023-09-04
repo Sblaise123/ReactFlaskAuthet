@@ -12,7 +12,7 @@ import { Private} from "./pages/private"
 import {Login} from "./pages/login";
 
 import { Register } from "./pages/register";
-
+import { Createaccount } from "./pages/Createaccount";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 
@@ -37,6 +37,8 @@ const Layout = () => {
                         <Route element= {<Register />} path= "/register" />
                         <Route element= {<Login />} path= "/login" />
                         <Route element= {<Private />} path= "/private" />
+                        <Route element= {<Createaccount />} path= "/createaccount" />
+
                     </Routes>
                     <Footer />
                 </ScrollToTop>
